@@ -1,53 +1,39 @@
 <?php
 
-class Collection
+
+interface Newsletter
 {
+    public function subscribe($email);
+}
 
-    protected $items =[];
-
-    /**
-     * Collection constructor.
-     * @param array $items
-     */
-    public function __construct(array $items)
+class CampaignMonitor implements Newsletter
+{
+    public function subscribe($email)
     {
-        $this->items = $items;
-    }
-
-    public function sum($key)
-    {
-        return array_sum(array_column($this->items, $key));
+        die('subscribing with campaign monitor');
     }
 
 }
 
-class VideosCollection extends Collection
+class Drip implements Newsletter
 {
-    public function length()
+    public function subscribe($email)
     {
-        return $this->sum('length');
+        die('subscribing with drip');
     }
 }
 
-class Video
+class NewsLetterSubscriptionsController
 {
-    protected $title;
-    public $length;
-
-    public function __construct($title, $length)
+    public function store(Newsletter $newsletter)
     {
-        $this->title = $title;
-        $this->length = $length;
+        $email = 'daria@gmail.com';
+        $newsletter->subscribe($email);
     }
 }
 
-$videos= new VideosCollection([
-    new Video('video 1', 100),
-    new Video('video 2', 150),
-    new Video('video 3', 200),
-    new Video('video 4', 300),
-]);
 
-echo $videos->length();
+$controller = new NewsLetterSubscriptionsController();
+$controller -> store(new Drip());
 
 
